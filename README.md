@@ -2,6 +2,7 @@
 
 ## To Run
 **Required:** Go
+
 Clone repo to local system
 
 By default the program parses "/log/error.log"
