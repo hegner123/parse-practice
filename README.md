@@ -18,21 +18,6 @@ go run . -f debug.log
 go run . -f error.log
 go run . -f info.log
 ```
-The program can parse the following logs.
-
-* Debug
-```
-2025-03-18T15:06:12Z INFO HTTP request received: method=GET, path=/api/items, status=200, duration=150ms
-```
-* Error
-```
-2025-03-18T15:05:01Z ERROR Database connection failed: timeout error (db=users, retry=3)
-```
-* Info
-```
-2025-03-18T15:04:05Z INFO Server started on port 8080
-```
-
 ## Build
 
 To build clone repo to your local and use the go build tool:
@@ -48,3 +33,20 @@ go build -o parselog .
 -f         #specify file
 -json      #output json
 ```
+
+## Logs
+The program can parse the following logs.
+
+* Debug
+```
+2025-03-18T15:06:12Z INFO HTTP request received: method=GET, path=/api/items, status=200, duration=150ms
+```
+* Error
+```
+2025-03-18T15:05:01Z ERROR Database connection failed: timeout error (db=users, retry=3)
+```
+* Info
+```
+2025-03-18T15:04:05Z INFO Server started on port 8080
+```
+
