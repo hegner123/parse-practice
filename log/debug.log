@@ -1,0 +1,7 @@
+2025-03-18T15:06:12Z INFO HTTP request received: method=GET, path=/api/items, status=200, duration=150ms
+2025-03-19T15:00:12Z DEBUG HTTP request received: method=POST, path=/api/item, status=200, duration=010ms
+2025-03-20T15:00:12Z ERROR HTTP request received: method=GET, path=/api/item/180, status=200, duration=150ms
+2025-03-21T15:00:12Z INFO HTTP request received: method=GET, path=/api/user/124, status=200, duration=110ms
+2025-03-22T15:00:12Z DEBUG HTTP request received: method=PUT, path=/api/user/124, status=200, duration=110ms
+2025-03-23T15:00:12Z DEBUG HTTP request received: method=DELETE, path=/api/item/200, status=200, duration=110ms
+2025-03-24T15:00:12Z ERROR HTTP request received: method=POST, path=/api/item, status=400, duration=1110ms

@@ -1,0 +1,5 @@
+2025-03-18T15:05:01Z ERROR Database connection failed: timeout error (db=users, retry=3)
+2025-03-19T08:00:01Z ERROR Database connection failed: timeout error (db=users, retry=3)
+2025-03-20T12:15:01Z ERROR Database connection failed: timeout error (db=users, retry=3)
+2025-03-21T17:40:01Z ERROR Database connection failed: timeout error (db=users, retry=3)
+2025-03-21T17:41:01Z ERROR Database connection failed: timeout error (db=users, retry=3)
