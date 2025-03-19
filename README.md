@@ -8,7 +8,7 @@ Clone repo to local system
 
 By default the program parses "./log/error.log"
 
-To run with default path open a terminal at the root of the repo and use:
+To run without building and using the  default path open a terminal at the root of the repo and use:
 ```bash
 go run . 
 ```
@@ -18,7 +18,6 @@ go run . debug.log
 go run . error.log
 go run . info.log
 ```
-
 The program can parse the following logs.
 
 * Debug
@@ -32,4 +31,12 @@ The program can parse the following logs.
 * Info
 ```
 2025-03-18T15:04:05Z INFO Server started on port 8080
+```
+
+## Build
+
+To build clone repo to your local and use the go build tool:
+
+```bash
+go build -o parselog .
 ```

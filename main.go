@@ -1,6 +1,7 @@
 package main
 
 import (
+	"flag"
 	"fmt"
 	"log"
 	"os"
@@ -21,14 +22,24 @@ const (
 
 type Log interface {
 	String() string
+	JSON()
 }
 
+var FILE *string = flag.String("f", "error.log", "specifiy file")
+var JSON *bool = flag.Bool("json", false, "output json")
+
 func main() {
+	flag.Usage = func() {
+		fmt.Fprintf(flag.CommandLine.Output(), "Usage: parselog [options]\n")
+		flag.PrintDefaults()
+	}
+	flag.Parse()
+
+
 	var fileName string
-	if len(os.Args) > 1 {
-		fileName = "log/" + os.Args[1]
-	} else {
-		fileName = "log/error.log"
+	fileName = "log/error.log"
+	if FILE != nil {
+		fileName = "log/" + *FILE
 	}
 	file, err := os.ReadFile(fileName)
 	if err != nil {
@@ -37,7 +48,7 @@ func main() {
 	}
 
 	name := strings.TrimSuffix(fileName, ".log")
-    n := strings.TrimPrefix(name, "log/")
+	n := strings.TrimPrefix(name, "log/")
 	var report *[]Log
 	switch fileType(n) {
 	case Error:
@@ -59,9 +70,14 @@ func main() {
 			return
 		}
 	}
-    reportSlice := *report
+	reportSlice := *report
 
 	for _, r := range reportSlice {
-		fmt.Println(r.String())
+		if *JSON {
+			r.JSON()
+		} else {
+			fmt.Println(r.String())
+		}
 	}
 }
+

@@ -1,7 +1,9 @@
 package main
 
 import (
+	"encoding/json"
 	"fmt"
+	"log"
 	"strconv"
 	"strings"
 	"time"
@@ -19,23 +21,31 @@ const (
 )
 
 type debugLog struct {
-	timestamp time.Time
-	level     logLevel
-	method    DebugMethod
-	path      string
-	status    int64
-	duration  time.Duration
+	Timestamp time.Time     `json:"timestamp"`
+	Level     logLevel      `json:"level"`
+	Method    DebugMethod   `json:"method"`
+	Path      string        `json:"path"`
+	Status    int64         `json:"status"`
+	Duration  time.Duration `json:"duration"`
 }
 
 func (d debugLog) String() string {
 	var entry strings.Builder
-	entry.WriteString(fmt.Sprintf("Time: %s\n", d.timestamp.String()))
-	entry.WriteString(fmt.Sprintf("Level: %s\n", string(d.level)))
-	entry.WriteString(fmt.Sprintf("Method: %s\n", d.method))
-	entry.WriteString(fmt.Sprintf("Path: %s\n", d.path))
-	entry.WriteString(fmt.Sprintf("Status: %d\n", d.status))
-	entry.WriteString(fmt.Sprintf("Duration: %s\n", d.duration.String()))
+	entry.WriteString(fmt.Sprintf("Time: %s\n", d.Timestamp.String()))
+	entry.WriteString(fmt.Sprintf("Level: %s\n", string(d.Level)))
+	entry.WriteString(fmt.Sprintf("Method: %s\n", d.Method))
+	entry.WriteString(fmt.Sprintf("Path: %s\n", d.Path))
+	entry.WriteString(fmt.Sprintf("Status: %d\n", d.Status))
+	entry.WriteString(fmt.Sprintf("Duration: %s\n", d.Duration.String()))
 	return entry.String()
+}
+
+func (d debugLog) JSON() {
+	js, err := json.Marshal(d)
+    if err!=nil {
+        log.Fatal(err)
+    }
+    fmt.Println(string(js))
 }
 
 func parseDebugLog(file string) (*[]Log, error) {
@@ -57,20 +67,20 @@ func parseDebugLog(file string) (*[]Log, error) {
 			tPair2 := strings.TrimSpace(kvPair[1])
 			kvP[tPair1] = tPair2
 		}
-		entry.method = DebugMethod(kvP["method"])
-		entry.path = kvP["path"]
+		entry.Method = DebugMethod(kvP["method"])
+		entry.Path = kvP["path"]
 		s := kvP["status"]
 		statusI, err := strconv.ParseInt(s, 10, 64)
 		if err != nil {
 			return nil, err
 		}
-		entry.status = statusI
+		entry.Status = statusI
 		td := kvP["duration"]
 		dur, err := time.ParseDuration(td)
 		if err != nil {
 			return nil, err
 		}
-		entry.duration = dur
+		entry.Duration = dur
 		tokens := strings.Split(line, " ")
 		for i, tk := range tokens {
 			t := strings.TrimSpace(tk)
@@ -79,12 +89,12 @@ func parseDebugLog(file string) (*[]Log, error) {
 				if err != nil {
 					return nil, err
 				}
-				entry.timestamp = ts
+				entry.Timestamp = ts
 				continue
-            }
+			}
 			if logLevel(t) == INFO || logLevel(t) == ERROR || logLevel(t) == DEBUG {
 
-				entry.level = logLevel(t)
+				entry.Level = logLevel(t)
 			}
 		}
 		report = append(report, entry)

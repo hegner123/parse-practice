@@ -1,7 +1,9 @@
 package main
 
 import (
+	"encoding/json"
 	"fmt"
+	"log"
 	"strconv"
 	"strings"
 	"time"
@@ -10,21 +12,29 @@ import (
 //2025-03-20T12:15:01Z ERROR Database connection failed: timeout error (db=users, retry=3)
 
 type errorLog struct {
-	timestamp time.Time
-	level     logLevel
-	message   string
-	db        string
-	retry     int64
+	Timestamp time.Time `json:"timestamp"`
+	Level     logLevel  `json:"level"`
+	Message   string    `json:"message"`
+	DB        string    `json:"db"`
+	Retry     int64     `json:"retry"`
 }
 
 func (e errorLog) String() string {
 	var entry strings.Builder
-	entry.WriteString(fmt.Sprintln("Time:", e.timestamp))
-	entry.WriteString(fmt.Sprintf("Message: %s\n", e.message))
-	entry.WriteString(fmt.Sprintf("Level: %s\n", e.level))
-	entry.WriteString(fmt.Sprintf("DB: %s\n", e.db))
-	entry.WriteString(fmt.Sprintf("Retry: %d\n\n", e.retry))
+	entry.WriteString(fmt.Sprintln("Time:", e.Timestamp))
+	entry.WriteString(fmt.Sprintf("Message: %s\n", e.Message))
+	entry.WriteString(fmt.Sprintf("Level: %s\n", e.Level))
+	entry.WriteString(fmt.Sprintf("DB: %s\n", e.DB))
+	entry.WriteString(fmt.Sprintf("Retry: %d\n\n", e.Retry))
 	return entry.String()
+}
+
+func (e errorLog) JSON() {
+	js, err := json.Marshal(e)
+    if err!=nil {
+        log.Fatal(err)
+    }
+    fmt.Println(string(js))
 }
 
 func parseErrorLog(file string) (*[]Log, error) {
@@ -52,12 +62,12 @@ func parseErrorLog(file string) (*[]Log, error) {
 
 		tokens := strings.Split(line, " ")
 		var entry errorLog = errorLog{}
-		entry.db = keyValue["db"]
+		entry.DB = keyValue["db"]
 		i, err := strconv.ParseInt(keyValue["retry"], 10, 64)
 		if err != nil {
 			return nil, err
 		}
-		entry.retry = i
+		entry.Retry = i
 		var msg []string
 		for i, t := range tokens {
 			t := strings.TrimSpace(t)
@@ -69,18 +79,18 @@ func parseErrorLog(file string) (*[]Log, error) {
 				if err != nil {
 					return nil, err
 				}
-				entry.timestamp = ts
+				entry.Timestamp = ts
 				continue
 			}
 			if i == 1 {
-				entry.level = logLevel(t)
+				entry.Level = logLevel(t)
 				continue
 			}
 			if !strings.Contains(t, "(") && !strings.Contains(t, ")") {
 				msg = append(msg, t)
 			}
 		}
-		entry.message = strings.Join(msg, " ")
+		entry.Message = strings.Join(msg, " ")
 		report = append(report, entry)
 	}
 	return &report, nil

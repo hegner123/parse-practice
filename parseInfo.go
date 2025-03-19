@@ -1,7 +1,9 @@
 package main
 
 import (
+	"encoding/json"
 	"fmt"
+	"log"
 	"strings"
 	"time"
 )
@@ -9,17 +11,24 @@ import (
 //2025-03-18T15:04:05Z INFO Server started on port 8080
 
 type infoLog struct {
-	timestamp time.Time
-	level     logLevel
-	message   string
+	Timestamp time.Time `json:"timestamp"`
+	Level     logLevel  `json:"level"`
+	Message   string    `json:"message"`
 }
 
 func (i infoLog) String() string {
 	var entry strings.Builder
-	entry.WriteString(fmt.Sprintf("Time: %s\n", i.timestamp.String()))
-	entry.WriteString(fmt.Sprintf("Level: %s\n", string(i.level)))
-	entry.WriteString(fmt.Sprintf("Message: %s\n", i.message))
+	entry.WriteString(fmt.Sprintf("Time: %s\n", i.Timestamp.String()))
+	entry.WriteString(fmt.Sprintf("Level: %s\n", string(i.Level)))
+	entry.WriteString(fmt.Sprintf("Message: %s\n", i.Message))
 	return entry.String()
+}
+func (i infoLog) JSON() {
+	js, err := json.Marshal(i)
+	if err != nil {
+		log.Fatal(err)
+	}
+	fmt.Println(string(js))
 }
 
 func parseInfoLog(file string) (*[]Log, error) {
@@ -38,17 +47,17 @@ func parseInfoLog(file string) (*[]Log, error) {
 				if err != nil {
 					return nil, err
 				}
-				entry.timestamp = ts
+				entry.Timestamp = ts
 				continue
 
 			}
 			if i == 1 {
-				entry.level = logLevel(t)
+				entry.Level = logLevel(t)
 			}
 			message = append(message, t)
 
 		}
-		entry.message = strings.Join(message, " ")
+		entry.Message = strings.Join(message, " ")
 		report = append(report, entry)
 	}
 	return &report, nil
