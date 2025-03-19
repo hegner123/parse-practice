@@ -44,5 +44,6 @@ go build -o parselog .
 ## Flags
 
 ```bash
+-h | -help #help message
 -f #specify file
 -json #output json
