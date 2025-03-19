@@ -1,4 +1,5 @@
 # Parse Practice
+Generated logs with GPT and went through parsing into structs, then using an interface to print the different struct types.
 
 ## To Run
 **Required:** Go
