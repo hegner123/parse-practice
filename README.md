@@ -5,7 +5,7 @@
 
 Clone repo to local system
 
-By default the program parses "/log/error.log"
+By default the program parses "./log/error.log"
 To run with default path open a terminal at the root of the repo and use:
 ```bash
 go run . 
