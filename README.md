@@ -14,9 +14,9 @@ go run .
 ```
 The program can also accept filename arguments to specify which log to parse:
 ```bash
-go run . debug.log
-go run . error.log
-go run . info.log
+go run . -f debug.log
+go run . -f error.log
+go run . -f info.log
 ```
 The program can parse the following logs.
 
@@ -40,3 +40,9 @@ To build clone repo to your local and use the go build tool:
 ```bash
 go build -o parselog .
 ```
+
+## Flags
+
+```bash
+-f #specify file
+-json #output json
