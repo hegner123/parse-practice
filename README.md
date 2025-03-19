@@ -14,9 +14,9 @@ go run .
 ```
 The program can also accept filename arguments to specify which log to parse:
 ```bash
+go run . debug.log
 go run . error.log
 go run . info.log
-go run . debug.log
 ```
 
 The program can parse the following logs.
